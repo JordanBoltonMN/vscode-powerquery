@@ -1,10 +1,12 @@
 {
+	"name": "vscode-power-query",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.30.0"
 	},
 	"categories": [
-		"Other"
+		"Other",
+		"Programming Languages"
 	],
 	"activationEvents": [
 		"onCommand:extension.helloWorld"
@@ -15,6 +17,28 @@
 			{
 				"command": "extension.helloWorld",
 				"title": "Hello World"
+			}
+		],
+		"languages": [
+			{
+				"id": "powerquery",
+				"aliases": [
+					"Power Query",
+					"powerquery"
+				],
+				"extensions": [
+					"pq",
+					"m",
+					"mout"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "powerquery",
+				"scopeName": "text.powerquery",
+				"path": "./syntaxes/powerquery.tmLanguage.json"
 			}
 		]
 	},
