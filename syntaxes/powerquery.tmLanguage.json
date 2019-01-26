@@ -13,7 +13,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.powerquery",
-				"match": "\\b(if|while|for|return)\\b"
+				"match": "\\b(and|as|each|else|error|false|if|in|is|let|meta|not|or|otherwise|section|shared|then|true|try|type)|(#(binary|date|datetime|datetimezone|duration|infinity|nan|sections|shared|table|time))\\b"
 			}]
 		},
 		"strings": {
