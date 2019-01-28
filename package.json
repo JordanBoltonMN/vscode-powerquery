@@ -9,7 +9,7 @@
 		"Programming Languages"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:powerquery"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
