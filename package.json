@@ -13,18 +13,13 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		],
 		"languages": [
 			{
 				"id": "powerquery",
 				"aliases": [
 					"Power Query",
-					"powerquery"
+					"powerquery",
+					"M"
 				],
 				"extensions": [
 					"pq",
@@ -50,7 +45,7 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"pq-fmt-core": "^0.0.1",
+		"pq-fmt-core": "^0.0.3",
 		"typescript": "^3.1.4",
 		"vscode": "^1.1.25",
 		"tslint": "^5.8.0",
