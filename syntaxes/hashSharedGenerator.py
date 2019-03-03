@@ -1,20 +1,5 @@
 import csv
 
-known_values = [
-    "DELETE",
-    "GET",
-    "HEAD",
-    "PATCH",
-    "POST",
-    "PUT",
-    "[Function]",
-    "[Record]",
-    "[Table]",
-    "[Number]",
-    "[Type]",
-    "en-US",
-]
-
 value_mapping = {
     "DELETE": "entity.constant.other.powerquery",
     "GET": "entity.constant.other.powerquery",
@@ -29,8 +14,6 @@ value_mapping = {
     "[Type]": "entity.support.type.powerquery",
     "en-US": "entity.support.type.powerquery",
 }
-
-assert set(known_values) == set(value_mapping.keys())
 
 def create_regex(iterable):
     base = "|".join(["({})".format(i) for i in iterable])
@@ -55,7 +38,7 @@ with open("hashSHared.csv", "r", encoding="utf-8-sig") as f:
         if value.isdigit() or is_float(value):
             value = "[Number]"
 
-        elif value not in known_values:
+        elif value not in value_mapping:
             raise KeyError(value)
 
         grouped_by_value.setdefault(value, [])
