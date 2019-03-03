@@ -22,7 +22,7 @@ value_mapping = {
     "PATCH": "entity.constant.other.powerquery",
     "POST": "entity.constant.other.powerquery",
     "PUT": "entity.constant.other.powerquery",
-    "[Function]": None,
+    "[Function]": "entity.name.function.powerquery",
     "[Record]": None,
     "[Table]": None,
     "[Number]": "constant.numeric.powerquery",
@@ -70,7 +70,8 @@ for tag, elements in grouped_by_value.items():
     grouped_by_mapping.setdefault(mapped, [])
     grouped_by_mapping[mapped].extend(elements)
 
-for mapped, elements in grouped_by_mapping.items():
+for mapped in sorted(grouped_by_mapping.keys()):
+    elements = grouped_by_mapping[mapped]
     elements.sort(key=lambda s: len(s), reverse=True)
     print(mapped)
     print(create_regex(elements))

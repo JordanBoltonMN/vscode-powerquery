@@ -54,6 +54,9 @@ other = [
     "section",
     "shared",
     "type",
+]
+
+hash_other = [
     "binary",
     "date",
     "datetime",
@@ -62,12 +65,11 @@ other = [
     "infinity",
     "nan",
     "sections",
-    "shared",
     "table",
     "time",
 ]
 
-assert_disjoint_sets(control, constant, operator, other)
+assert_disjoint_sets(control, constant, operator, other, hash_other)
 
 print("keyword.control.powerquery")
 print(create_regex(control))
@@ -84,4 +86,3 @@ print()
 print("keyword.other.powerquery")
 print(create_regex(other))
 print()
-
