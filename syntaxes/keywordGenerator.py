@@ -75,7 +75,7 @@ print("keyword.control.powerquery")
 print(create_regex(control))
 print()
 
-print("keyword.constant.language")
+print("keyword.constant.language.powerquery")
 print(create_regex(constant))
 print()
 
