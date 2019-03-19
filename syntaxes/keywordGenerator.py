@@ -1,13 +1,16 @@
 import json
 from itertools import combinations
 
+
 def create_regex(iterable):
     iterable.sort(key=lambda s: len(s), reverse=True)
     base = "|".join(["({})".format(i) for i in iterable])
     return wrap_regex(base)
 
+
 def wrap_regex(base):
     return "\\\\b({})\\\\b".format(base)
+
 
 def assert_disjoint_sets(*args):
     for comb in combinations(args, 2):
@@ -23,6 +26,7 @@ def assert_disjoint_sets(*args):
             },
             indent=4,
         )
+
 
 control = [
     "each",

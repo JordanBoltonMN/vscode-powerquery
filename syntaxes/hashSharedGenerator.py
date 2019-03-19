@@ -15,12 +15,15 @@ value_mapping = {
     "en-US": "entity.support.type.powerquery",
 }
 
+
 def create_regex(iterable):
     base = "|".join(["({})".format(i) for i in iterable])
     return wrap_regex(base)
 
+
 def wrap_regex(base):
     return "\\\\b({})\\\\b".format(base)
+
 
 def is_float(x):
     try:
@@ -28,6 +31,7 @@ def is_float(x):
         return True
     except ValueError:
         return False
+
 
 grouped_by_value = {}
 with open("hashSHared.csv", "r", encoding="utf-8-sig") as f:
