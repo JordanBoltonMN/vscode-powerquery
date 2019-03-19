@@ -10,6 +10,18 @@
 		}
 	],
 	"repository": {
+		"constants": {
+			"patterns": [
+				{
+					"name": "entity.constant.numeric.powerquery",
+					"match": "\\b(0[xX][a-fA-F0-9]+)\\b"
+				},
+				{
+					"name": "entity.constant.numeric.powerquery",
+					"match": "\\b(([0-9]*\\.[0-9]+)|([0-9]+))([eE][\\+\\-]?[0-9]+)?\\b"
+				}
+			]
+		},
 		"hashshared": {
 			"patterns": [
 				{
@@ -37,7 +49,7 @@
 					"match": "\\b((otherwise)|(error)|(each)|(else)|(then)|(let)|(try)|(if)|(in))\\b"
 				},
 				{
-					"name": "keyword.constant.language",
+					"name": "keyword.constant.language.powerquery",
 					"match": "\\b((false)|(true))\\b"
 				},
 				{
@@ -46,7 +58,11 @@
 				},
 				{
 					"name": "keyword.other.powerquery",
-					"match": "\\b((datetimezone)|(datetime)|(duration)|(infinity)|(sections)|(section)|(shared)|(binary)|(shared)|(table)|(meta)|(type)|(date)|(time)|(nan))\\b"
+					"match": "\\b((datetimezone)|(datetime)|(duration)|(infinity)|(sections)|(section)|(shared)|(binary)|(shared)|(table)|(meta)|(type)|(time)|(nan))\\b"
+				},
+				{
+					"name": "keyword.other.powerquery2",
+					"match": "\\b#date\\b"
 				}
 			]
 		},
