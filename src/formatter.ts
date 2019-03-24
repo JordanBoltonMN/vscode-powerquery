@@ -1,13 +1,7 @@
-import * as pqFmt from "powerquery-fmt";
+import { format, FormatRequest, IndentationLiteral, NewlineLiteral, Result, ResultKind, SerializerOptions } from "powerquery-fmt";
+import { FormatError } from "powerquery-fmt/lib/format/error";
 import * as vscode from "vscode";
-import {
-    CancellationToken,
-    DocumentFormattingEditProvider,
-    FormattingOptions,
-    Range,
-    TextDocument,
-    TextEdit
-} from "vscode";
+import { CancellationToken, DocumentFormattingEditProvider, FormattingOptions, Range, TextDocument, TextEdit } from "vscode";
 
 export class PowerQueryEditProvider implements DocumentFormattingEditProvider {
     provideDocumentFormattingEdits(
@@ -22,34 +16,35 @@ export class PowerQueryEditProvider implements DocumentFormattingEditProvider {
 
         let indentationLiteral;
         if (options.insertSpaces) {
-            indentationLiteral = pqFmt.IndentationLiteral.SpaceX4;
-        } else {
-            indentationLiteral = pqFmt.IndentationLiteral.Tab;
+            indentationLiteral = IndentationLiteral.SpaceX4;
+        }
+        else {
+            indentationLiteral = IndentationLiteral.Tab;
         }
 
-        const serializerOptions: pqFmt.SerializerOptions = {
+        const serializerOptions: SerializerOptions = {
             indentationLiteral,
-            newlineLiteral: pqFmt.NewlineLiteral.Unix
+            newlineLiteral: NewlineLiteral.Unix
         };
-        const formatRequest: pqFmt.FormatRequest = {
+        const formatRequest: FormatRequest = {
             document: documentText,
             options: serializerOptions
         };
-        const formatResult: pqFmt.Result<string, pqFmt.TFormatError> = pqFmt.format(
-            formatRequest
-        );
-        if (formatResult.kind === pqFmt.ResultKind.Ok) {
+        const formatResult: Result<string, FormatError.TFormatError> = format(formatRequest);
+        if (formatResult.kind === ResultKind.Ok) {
             return Promise.resolve([
                 TextEdit.replace(fullDocumentRange(document), formatResult.value)
             ]);
-        } else {
+        }
+        else {
             const error = formatResult.error;
             console.error(error);
 
             let informationMessage;
-            if (error instanceof pqFmt.LexerError || error instanceof pqFmt.ParserError) {
+            if (FormatError.isTFormatError(error)) {
                 informationMessage = error.innerError.message;
-            } else {
+            }
+            else {
                 informationMessage = "An unknown error occured during formatting.";
             }
 
