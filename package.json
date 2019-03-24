@@ -1,20 +1,39 @@
 {
+	"name": "vscode-power-query",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.30.0"
 	},
 	"categories": [
-		"Other"
+		"Other",
+		"Programming Languages"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:powerquery"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
+		"languages": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"id": "powerquery",
+				"aliases": [
+					"Power Query",
+					"powerquery",
+					"M"
+				],
+				"extensions": [
+					"pq",
+					"m",
+					"mout"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "powerquery",
+				"scopeName": "text.powerquery",
+				"path": "./syntaxes/powerquery.tmLanguage.json"
 			}
 		]
 	},
@@ -26,11 +45,14 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"pq-fmt-core": "^0.0.1",
 		"typescript": "^3.1.4",
 		"vscode": "^1.1.25",
 		"tslint": "^5.8.0",
 		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
+		"@types/mocha": "^2.2.42",
+		"powerquery-parser": "^0.0.1"
+	},
+	"dependencies": {
+		"powerquery-fmt": "^0.0.1"
 	}
 }

@@ -1,6 +1,7 @@
-import { format, FormatRequest, IndentationLiteral, NewlineLiteral, Result, ResultType, SerializerOptions } from "pq-fmt-core";
+import { format, FormatRequest, IndentationLiteral, NewlineLiteral, Result, ResultKind, SerializerOptions } from "powerquery-fmt";
+import { FormatError } from "powerquery-fmt/lib/format/error";
 import * as vscode from "vscode";
-import { CancellationToken, DocumentFilter, DocumentFormattingEditProvider, DocumentSelector, FormattingOptions, Range, TextDocument, TextEdit } from "vscode";
+import { CancellationToken, DocumentFormattingEditProvider, FormattingOptions, Range, TextDocument, TextEdit } from "vscode";
 
 export class PowerQueryEditProvider implements DocumentFormattingEditProvider {
     provideDocumentFormattingEdits(
@@ -8,6 +9,11 @@ export class PowerQueryEditProvider implements DocumentFormattingEditProvider {
         options: FormattingOptions,
         _: CancellationToken
     ): Promise<TextEdit[]> {
+        const documentText = document.getText();
+        if (!documentText) {
+            return Promise.resolve([]);
+        }
+
         let indentationLiteral;
         if (options.insertSpaces) {
             indentationLiteral = IndentationLiteral.SpaceX4;
@@ -18,66 +24,34 @@ export class PowerQueryEditProvider implements DocumentFormattingEditProvider {
 
         const serializerOptions: SerializerOptions = {
             indentationLiteral,
-            newlineLiteral: NewlineLiteral.Unix,
+            newlineLiteral: NewlineLiteral.Unix
         };
         const formatRequest: FormatRequest = {
-            document: document.getText(),
-            options: serializerOptions,
-        }
-        const formatResult: Result<string, string> = format(formatRequest);
-        if (formatResult.type === ResultType.Ok) {
+            document: documentText,
+            options: serializerOptions
+        };
+        const formatResult: Result<string, FormatError.TFormatError> = format(formatRequest);
+        if (formatResult.kind === ResultKind.Ok) {
             return Promise.resolve([
-                TextEdit.replace(
-                    fullDocumentRange(document),
-                    formatResult.value,
-                )
+                TextEdit.replace(fullDocumentRange(document), formatResult.value)
             ]);
         }
         else {
-            vscode.window.showInformationMessage("An error has occured while formatting");
-            console.log(formatResult.error);
-            return Promise.reject("An error occured while formatting");
+            const error = formatResult.error;
+            console.error(error);
+
+            let informationMessage;
+            if (FormatError.isTFormatError(error)) {
+                informationMessage = error.innerError.message;
+            }
+            else {
+                informationMessage = "An unknown error occured during formatting.";
+            }
+
+            vscode.window.showInformationMessage(informationMessage);
+            return Promise.reject(error);
         }
     }
-}
-
-function selector(): DocumentSelector {
-    const allLanguages = allEnabledLanguages();
-    const allRangeLanguages = rangeSupportedLanguages();
-    const { disableLanguages } = getConfig();
-    const globalLanguageSelector = allLanguages.filter(
-        l => !disableLanguages.includes(l)
-    );
-    const globalRangeLanguageSelector = allRangeLanguages.filter(
-        l => !disableLanguages.includes(l)
-    );
-    if (workspace.workspaceFolders === undefined) {
-        // no workspace opened
-        return {
-            languageSelector: globalLanguageSelector,
-            rangeLanguageSelector: globalRangeLanguageSelector,
-        };
-    }
-
-    // at least 1 workspace
-    const untitledLanguageSelector: DocumentFilter[] = globalLanguageSelector.map(
-        l => ({ language: l, scheme: 'untitled' })
-    );
-    const untitledRangeLanguageSelector: DocumentFilter[] = globalRangeLanguageSelector.map(
-        l => ({ language: l, scheme: 'untitled' })
-    );
-    const fileLanguageSelector: DocumentFilter[] = globalLanguageSelector.map(
-        l => ({ language: l, scheme: 'file' })
-    );
-    const fileRangeLanguageSelector: DocumentFilter[] = globalRangeLanguageSelector.map(
-        l => ({ language: l, scheme: 'file' })
-    );
-    return {
-        languageSelector: untitledLanguageSelector.concat(fileLanguageSelector),
-        rangeLanguageSelector: untitledRangeLanguageSelector.concat(
-            fileRangeLanguageSelector
-        ),
-    };
 }
 
 function fullDocumentRange(document: TextDocument): Range {
